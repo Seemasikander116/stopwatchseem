@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Stopwatch</title>
+        
+    </head>
+    <style type="text/css">
+        .stopwatch {
+    width: 300px;
+    height: 50vh;
+    margin-left: 30%;
+    margin-top: 10%;
+    color: white;
+    border:4px solid purple;
+    background-image: linear-gradient(purple,blue);
+    border-radius: 5px;
+    box-shadow: 0 4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+
+    &, & * {
+        transition: all 0.15s ease-out;
+    }
+
+    .controls {
+        display: flex;
+
+        button {
+            flex-grow: 1;
+            margin: 0 5px 4px;
+            padding: 5px 0;
+            box-shadow: 0 4px rgba(0, 0, 0, 0.75);
+            border: 0;
+            outline: 0;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+
+            &:active {
+                margin-bottom: 0;
+                margin-top: 4px;
+                box-shadow: none;
+            }
+        }
+
+        .start {
+            background-color: #5d5;
+
+            &:hover {
+                background-color: #6e6;
+            }
+        }
+      
+        .stop {
+            background-color: #d55;
+
+            &:hover {
+                background-color: #e66;
+            }
+        }
+
+        .reset {
+            background-color: #55d;
+
+            &:hover {
+                background-color: #66e;
+            }
+        }
+    }
+
+    
+}
+.display{
+    font-size: 40px;
+    text-align: center;
+   padding: 20px;
+    border-radius: 30px;
+}
+.controls button{
+    margin-top: 30%;
+    color: red;
+    border-radius: 100px;
+    padding: 30px;
+    fill: transparent;
+    border:3px solid purple;
+
+}
+    </style>
+    <body>
+
+        <div class="stopwatch">
+            <div class="display">
+                <span class="minutes">00</span><span class="seconds">00</span><span class="centiseconds">00</span>
+            </div>
+            <div class="controls">
+                <button class="start">Start</button>
+                <button class="stop">Stop</button>
+                <button class="reset">Reset</button>
+            </div>
+            
+        </div>
+
+        <script>
+            var ss = document.getElementsByClassName('stopwatch');
+
+[].forEach.call(ss, function (s) {
+    var currentTimer = 0,
+        interval = 0,
+        lastUpdateTime = new Date().getTime(),
+        start = s.querySelector('button.start'),
+        stop = s.querySelector('button.stop'),
+        reset = s.querySelector('button.reset'),
+        mins = s.querySelector('span.minutes'),
+        secs = s.querySelector('span.seconds'),
+        cents = s.querySelector('span.centiseconds');
+
+    start.addEventListener('click', startTimer);
+    stop.addEventListener('click', stopTimer);
+    reset.addEventListener('click', resetTimer);
+
+    function pad (n) {
+        return ('00' + n).substr(-2);
+    }
+
+    function update () {
+        var now = new Date().getTime(),
+            dt = now - lastUpdateTime;
+
+        currentTimer += dt;
+
+        var time = new Date(currentTimer);
+
+        mins.innerHTML = pad(time.getMinutes());
+        secs.innerHTML = pad(time.getSeconds());
+        cents.innerHTML = pad(Math.floor(time.getMilliseconds() / 10));
+
+        lastUpdateTime = now;
+    }
+
+    function startTimer () {
+        if (!interval) {
+            lastUpdateTime = new Date().getTime();
+            interval = setInterval(update, 1);
+        }
+    }
+
+    function stopTimer () {
+        clearInterval(interval);
+        interval = 0;
+    }
+
+    function resetTimer () {
+        stopTimer();
+
+        currentTimer = 0;
+
+        mins.innerHTML = secs.innerHTML = cents.innerHTML = pad(0);
+    }
+});
+        </script>
+    </body>
+</html>
